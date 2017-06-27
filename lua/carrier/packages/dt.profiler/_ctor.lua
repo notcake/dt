@@ -1,16 +1,16 @@
 Profiler = {}
 
-Error = Carrier.LoadPackage ("Pylon.Error")
-OOP   = Carrier.LoadPackage ("Pylon.OOP")
+Error = require ("Pylon.Error")
+OOP   = require ("Pylon.OOP")
 OOP.Initialize (_ENV)
 
 IO = {}
-Carrier.LoadProvider ("Pylon.IO").Initialize (IO)
+require_provider ("Pylon.IO").Initialize (IO)
 
-Enumeration = Carrier.LoadPackage ("Pylon.Enumeration")
+Enumeration = require ("Pylon.Enumeration")
 Enumeration.Initialize (_ENV)
 
-HTTP = Carrier.LoadProvider ("Pylon.HTTP")
+HTTP = require_provider ("Pylon.HTTP")
 
 include ("poolallocator.lua")
 
@@ -33,7 +33,7 @@ ComponentHost = Profiler.ProfilerComponentHost ()
 ComponentHost:Add ("FrameAdvance", Profiler.FrameAdvanceComponent (Profiler.Profiler))
 ComponentHost:Add ("Gamemode",     Profiler.GamemodeHookComponent (Profiler.Profiler))
 
-ComponentHost:Enable ()
+ComponentHost:Enable ("FrameAdvance")
 
 -- include ("api.lua")
 

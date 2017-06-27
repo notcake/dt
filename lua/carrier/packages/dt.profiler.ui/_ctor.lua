@@ -1,15 +1,18 @@
 UI = {}
 
-Error = Carrier.LoadPackage ("Pylon.Error")
-OOP   = Carrier.LoadPackage ("Pylon.OOP")
+Error = require ("Pylon.Error")
+OOP   = require ("Pylon.OOP")
 OOP.Initialize (_ENV)
 
-Util  = Carrier.LoadPackage ("Pylon.Util")
+Util  = require ("Pylon.Util")
 
-Profiler = Carrier.LoadPackage ("dt.Profiler")
+Profiler = require ("dt.Profiler")
 
 include ("frame.lua")
+include ("commands.lua")
 
 Frame = UI.Frame (Profiler.Profiler)
+
+RegisterCommands ()
 
 return UI

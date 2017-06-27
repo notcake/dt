@@ -18,15 +18,6 @@ function self:ctor (profiler)
 	self.Label = vgui.Create ("DLabel", self.Frame)
 	self.Label:Center ()
 	
-	concommand.Add ("+dt", function (ply, cmd, args) self:SetVisible (true)  end)
-	concommand.Add ("-dt", function (ply, cmd, args) self:SetVisible (false) end)
-	
-	concommand.Add ("dt_toggle",
-		function (ply, cmd, args)
-			self:SetVisible (not self:IsVisible ())
-		end
-	)
-	
 	self.Profiler.FrameEnded:AddListener (self:GetHashCode(),
 		function (_, frame)
 			self.Label:SetText (Util.Duration.Format (frame:GetDuration ()))
