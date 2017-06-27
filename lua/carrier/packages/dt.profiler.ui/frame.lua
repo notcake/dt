@@ -19,7 +19,7 @@ function self:ctor (profiler)
 	self.Label:Center ()
 	
 	self.Profiler.FrameEnded:AddListener (self:GetHashCode(),
-		function (_, frame)
+		function (frame)
 			self.Label:SetText (Util.Duration.Format (frame:GetDuration ()))
 		end
 	)
