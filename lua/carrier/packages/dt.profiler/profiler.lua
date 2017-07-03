@@ -17,7 +17,7 @@ function self:ctor ()
 		end
 	)
 	
-	self.PreviousFrame = nil
+	self.Frames = CircularBuffer (128)
 	self.CurrentFrame = nil
 	self.SectionStack = {}
 end
@@ -48,11 +48,10 @@ function self:EndFrame (t)
 	
 	currentFrame:End (t)
 	
-	-- self.Frames [#self.Frames + 1] = currentFrame
-	if self.PreviousFrame then
-		self.FrameAllocator:Free (self.PreviousFrame)
+	if self.Frames:GetCount () == self.Frames:GetCapacity () then
+		self.FrameAllocator:Free (self.Frames:Pop ())
 	end
-	self.PreviousFrame = currentFrame
+	self.Frames:Push (currentFrame)
 	
 	self.FrameEnded:Dispatch (currentFrame)
 end

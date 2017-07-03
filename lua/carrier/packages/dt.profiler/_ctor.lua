@@ -10,6 +10,8 @@ require_provider ("Pylon.IO").Initialize (IO)
 Enumeration = require ("Pylon.Enumeration")
 Enumeration.Initialize (_ENV)
 
+CircularBuffer = require ("Pylon.Containers.CircularBuffer")
+
 HTTP = require_provider ("Pylon.HTTP")
 
 include ("poolallocator.lua")

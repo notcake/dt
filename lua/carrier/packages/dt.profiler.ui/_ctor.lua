@@ -8,10 +8,18 @@ Util  = require ("Pylon.Util")
 
 Profiler = require ("dt.Profiler")
 
-include ("frame.lua")
+Phoenix = require ("Phoenix")
+
+include ("frametimegraph.lua")
+include ("window.lua")
+
 include ("commands.lua")
 
-Frame = UI.Frame (Profiler.Profiler)
+Window = nil
+function GetWindow ()
+	Window = Window or UI.Window (Profiler.Profiler)
+	return Window
+end
 
 RegisterCommands ()
 

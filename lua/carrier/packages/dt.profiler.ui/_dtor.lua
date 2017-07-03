@@ -1,6 +1,6 @@
-if Frame then
-	Frame:dtor ()
-	Frame = nil
+if Window then
+	Window:dtor ()
+	Window = nil
 end
 
 UnregisterCommands ()
