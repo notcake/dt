@@ -8,9 +8,8 @@ function self:ctor (profiler)
 	self:SetSize (800, 600)
 	self:Center ()
 	
-	self.FrameTimeGraph = FrameTimeGraph ()
+	self.FrameTimeGraph = FrameTimeGraph (self.Profiler)
 	self.FrameTimeGraph:SetParent (self)
-	self.FrameTimeGraph:Center ()
 	
 	self.Label = Phoenix.Label ()
 	self.Label:SetParent (self)
@@ -25,4 +24,11 @@ end
 
 function self:dtor ()
 	self.Profiler.FrameEnded:RemoveListener (self:GetHashCode ())
+end
+
+-- Internal
+function self:OnLayout (w, h)
+	if not self.FrameTimeGraph then return end
+	
+	self.FrameTimeGraph:SetRectangle (8, 8, w - 16, 128)
 end

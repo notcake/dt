@@ -67,6 +67,10 @@ function self:GetCurrentFrame ()
 	return self.CurrentFrame
 end
 
+function self:GetFrames ()
+	return self.Frames
+end
+
 function self:BeginSection (name, t)
 	if not self.CurrentFrame then
 		self:BeginFrame (0)

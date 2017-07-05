@@ -4,6 +4,8 @@ Error = require ("Pylon.Error")
 OOP   = require ("Pylon.OOP")
 OOP.Initialize (_ENV)
 
+Color = require ("Pylon.Color")
+
 Util  = require ("Pylon.Util")
 
 Profiler = require ("dt.Profiler")
