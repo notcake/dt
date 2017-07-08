@@ -30,5 +30,5 @@ end
 function self:OnLayout (w, h)
 	if not self.FrameTimeGraph then return end
 	
-	self.FrameTimeGraph:SetRectangle (8, 8, w - 16, 128)
+	self.FrameTimeGraph:SetRectangle (0, 0, w, 128)
 end
