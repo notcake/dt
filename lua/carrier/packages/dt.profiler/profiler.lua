@@ -17,7 +17,7 @@ function self:ctor ()
 		end
 	)
 	
-	self.Frames = CircularBuffer (128)
+	self.Frames = CircularBuffer (256)
 	self.CurrentFrame = nil
 	self.SectionStack = {}
 end
