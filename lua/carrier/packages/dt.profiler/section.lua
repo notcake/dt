@@ -1,15 +1,27 @@
 local self = {}
-Profiler.Section = Class (self)
+Profiler.Section = Class (self, Profiler.PoolObject)
 
-function self:ctor (name, startTime)
+function self:ctor (pool)
+	self.Children  = {}
+end
+
+-- PoolObject
+function self:Initialize (name, startTime)
 	self.Name      = name
 	
 	self.StartTime = startTime
 	self.EndTime   = nil
-	
-	self.Children  = {}
 end
 
+function self:Scrub ()
+	for i = #self.Children, 1, -1 do
+		local section = self.Children [i]
+		self.Children [i] = nil
+		section:Free ()
+	end
+end
+
+-- Section
 function self:Clear ()
 	for i = #self.Children, 1, -1 do
 		self.Children [i] = nil
@@ -55,5 +67,7 @@ function self:IndexOf (name)
 	return nil
 end
 
-Profiler.Section.Recycle = self.ctor
-Profiler.Section.Clear   = self.Clear
+Profiler.Section.Pool = Profiler.PoolAllocator (Profiler.Section)
+function Profiler.Section.Alloc (...)
+	return Profiler.Section.Pool:Alloc (...)
+end

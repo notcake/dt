@@ -1,10 +1,33 @@
 local self = {}
-Profiler.Frame = Class (self)
+Profiler.Frame = Class (self, Profiler.PoolObject)
 
-function self:ctor (index, startTime)
+function self:ctor (pool)
+end
+
+-- PoolObject
+function self:Initialize (index, startTime)
+	self.RefCount = 1
+	
 	self.Index = index
 	
-	self.Section = Profiler.Section (nil, startTime)
+	self.Section = Profiler.Section.Alloc (nil, startTime)
+end
+
+function self:Scrub ()
+	self.Section:Free ()
+	self.Section = nil
+end
+
+-- Frame
+function self:AddRef ()
+	self.RefCount = self.RefCount + 1
+end
+
+function self:Release ()
+	self.RefCount = self.RefCount - 1
+	if self.RefCount == 0 then
+		self:Free ()
+	end
 end
 
 function self:Clear ()
@@ -26,10 +49,7 @@ function self:GetRootSection ()
 	return self.Section
 end
 
-function Profiler.Frame.Recycle (self, index, startTime)
-	self.Index = index
-	
-	Profiler.Section.Recycle (self.Section, nil, startTime)
+Profiler.Frame.Pool = Profiler.PoolAllocator (Profiler.Frame)
+function Profiler.Frame.Alloc (...)
+	return Profiler.Frame.Pool:Alloc (...)
 end
-
-Profiler.Frame.Clear = self.Clear

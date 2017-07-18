@@ -1,42 +1,34 @@
 local self = {}
 Profiler.PoolAllocator = Class (self)
 
-function self:ctor (factory, recycler, scrubber)
-	self.Factory  = factory
-	self.Recycler = recycler
-	self.Scrubber = scrubber
+function self:ctor (class)
+	self.Class = class
 	
 	self.TotalSize = 0
 	self.Pool = {}
 end
-
-self.Factory  = Property ()
-self.Recycler = Property ()
-self.Scrubber = Property ()
 
 function self:Alloc (...)
 	if #self.Pool > 0 then
 		local object = self.Pool [#self.Pool]
 		self.Pool [#self.Pool] = nil
 		
-		if self.Recycler then
-			self.Recycler (object, ...)
-		end
+		object:Initialize (...)
 		
 		return object
 	else
-		local object = self.Factory (...)
+		local object = self.Class (self)
 		
 		self.TotalSize = self.TotalSize + 1
+		
+		object:Initialize (...)
 		
 		return object
 	end
 end
 
 function self:Free (object)
-	if self.Scrubber then
-		self.Scrubber (object)
-	end
+	object:Scrub ()
 	
 	self.Pool [#self.Pool + 1] = object
 end

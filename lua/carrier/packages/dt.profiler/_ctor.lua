@@ -15,6 +15,7 @@ CircularBuffer = require ("Pylon.Containers.CircularBuffer")
 HTTP = require_provider ("Pylon.HTTP")
 
 include ("poolallocator.lua")
+include ("poolobject.lua")
 
 include ("section.lua")
 include ("projectedsection.lua")

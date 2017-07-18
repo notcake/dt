@@ -2,21 +2,6 @@ local self = {}
 Profiler.Profiler = Class (self)
 
 function self:ctor ()
-	self.FrameAllocator = Profiler.PoolAllocator (
-		Profiler.Frame,
-		Profiler.Frame.Recycle,
-		function (frame)
-			self:ScrubFrame (frame)
-		end
-	)
-	self.SectionAllocator = Profiler.PoolAllocator (
-		Profiler.Section,
-		Profiler.Section.Recycle,
-		function (section)
-			self:ScrubSection (section)
-		end
-	)
-	
 	self.Frames = CircularBuffer (256)
 	self.CurrentFrame = nil
 	self.SectionStack = {}
@@ -31,7 +16,7 @@ function self:BeginFrame (index, t)
 		self:EndFrame (t)
 	end
 	
-	self.CurrentFrame = self.FrameAllocator:Alloc (index, t)
+	self.CurrentFrame = Profiler.Frame.Alloc (index, t)
 	self.SectionStack [1] = self.CurrentFrame:GetRootSection ()
 end
 
@@ -49,7 +34,7 @@ function self:EndFrame (t)
 	currentFrame:End (t)
 	
 	if self.Frames:GetCount () == self.Frames:GetCapacity () then
-		self.FrameAllocator:Free (self.Frames:Pop ())
+		self.Frames:Pop ():Release ()
 	end
 	self.Frames:Push (currentFrame)
 	
@@ -110,21 +95,4 @@ function self:Wrap (f, name)
 		
 		return r1, r2, r3, r4, r5, r6
 	end
-end
-
--- Internal, do not call
-function self:ScrubFrame (frame)
-	for section in frame:GetRootSection ():GetChildEnumerator () do
-		self.SectionAllocator:Free (section)
-	end
-	
-	frame:Clear ()
-end
-
-function self:ScrubSection (section)
-	for childSection in section:GetChildEnumerator () do
-		self.SectionAllocator:Free (childSection)
-	end
-	
-	section:Clear ()
 end
