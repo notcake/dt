@@ -10,9 +10,10 @@ Util  = require ("Pylon.Util")
 
 Profiler = require ("dt.Profiler")
 
-Phoenix = require ("Phoenix")
+Phoenix = require_provider ("Phoenix")
 
 include ("frametimegraph.lua")
+include ("frametimegraph.graph.lua")
 include ("window.lua")
 
 include ("commands.lua")
