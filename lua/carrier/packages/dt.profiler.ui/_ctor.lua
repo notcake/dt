@@ -14,6 +14,7 @@ Phoenix = require_provider ("Phoenix")
 
 include ("frametimegraph.lua")
 include ("frametimegraph.graph.lua")
+include ("calltreetableview.lua")
 include ("window.lua")
 
 include ("commands.lua")
