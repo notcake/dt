@@ -1,5 +1,5 @@
 local self = {}
-FrameTimeGraph.Graph = Class (self, Phoenix.View)
+FrameTimeGraph.Graph = Class (self, Glass.View)
 
 function self:ctor (graph)
 	self.Graph = graph

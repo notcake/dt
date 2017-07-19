@@ -1,5 +1,5 @@
 local self = {}
-UI.Window = Class (self, Phoenix.Window)
+UI.Window = Class (self, Glass.Window)
 
 function self:ctor (profiler)
 	self.Profiler = profiler
@@ -8,23 +8,23 @@ function self:ctor (profiler)
 	self:SetSize (800, 600)
 	self:Center ()
 	
-	self.FrameTimeGraphHeading = Phoenix.Label ()
+	self.FrameTimeGraphHeading = Glass.Label ()
 	self.FrameTimeGraphHeading:SetParent (self)
-	self.FrameTimeGraphHeading:SetFont (Phoenix.Skin.Default.Fonts.Headline)
+	self.FrameTimeGraphHeading:SetFont (Glass.Skin.Default.Fonts.Headline)
 	self.FrameTimeGraphHeading:SetText ("Frame Render Times")
 	self.FrameTimeGraph = FrameTimeGraph (self.Profiler)
 	self.FrameTimeGraph:SetParent (self)
 	
-	self.DurationLabel = Phoenix.Label ()
+	self.DurationLabel = Glass.Label ()
 	self.DurationLabel:SetParent (self)
 	self.DurationLabel:Center ()
-	self.FPSLabel = Phoenix.Label ()
+	self.FPSLabel = Glass.Label ()
 	self.FPSLabel:SetParent (self)
 	self.FPSLabel:Center ()
 	
-	self.CallTreeHeading = Phoenix.Label ()
+	self.CallTreeHeading = Glass.Label ()
 	self.CallTreeHeading:SetParent (self)
-	self.CallTreeHeading:SetFont (Phoenix.Skin.Default.Fonts.Headline)
+	self.CallTreeHeading:SetFont (Glass.Skin.Default.Fonts.Headline)
 	self.CallTreeHeading:SetText ("Call Tree")
 	
 	self.CallTreeTableView = CallTreeTableView (self.Profiler)

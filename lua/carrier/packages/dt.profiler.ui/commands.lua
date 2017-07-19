@@ -10,7 +10,7 @@ function RegisterCommands ()
 		end
 	)
 	
-	desktopItem = Phoenix.Desktop:AddItem ("dt", "error")
+	desktopItem = Glass.Desktop:AddItem ("dt", "error")
 	desktopItem.Click:AddListener (
 		function ()
 			GetWindow ():SetVisible (true)
