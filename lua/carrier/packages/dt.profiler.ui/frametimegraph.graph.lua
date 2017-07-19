@@ -16,23 +16,26 @@ function self:Render (w, h, render2d)
 	local x = w - frameCount * (self.BarWidth + self.BarSpacing) + self.BarSpacing
 	local y0 = h
 	
-	render2d:DrawLine (Color.Gray, 0, 0.25 * h,     w, 0.25 * h)
-	render2d:DrawLine (Color.Gray, 0, 0.50 * h,     w, 0.50 * h)
-	render2d:DrawLine (Color.Gray, 0, 0.75 * h,     w, 0.75 * h)
-	render2d:DrawLine (Color.Gray, 0, 1.00 * h - 1, w, 1.00 * h - 1)
+	-- HACK: Need to start the line at x = -0.5 really, but surface.* only does ints.
+	render2d:DrawLine (Color.LightGray, -1, 0.25 * h, w, 0.25 * h)
+	render2d:DrawLine (Color.LightGray, -1, 0.50 * h, w, 0.50 * h)
+	render2d:DrawLine (Color.LightGray, -1, 0.75 * h, w, 0.75 * h)
 	
 	for frame in frames:GetEnumerator () do
 		local duration = frame:GetDuration ()
 		local h = duration / (1 / 15) * h
 		local color = nil
 		if duration <= 1 / 60 then
-			color = Color.Green
+			color = Color.LightGreen
 		elseif duration <= 1 / 30 then
-			color = Color.Orange
+			color = Color.PeachPuff
 		else
-			color = Color.Red
+			color = Color.Pink
 		end
-		render2d:FillRectangle (color, x, y0 - h, self.BarWidth, h + 1)
+		
+		-- round the height
+		h = math.floor (h + 0.5)
+		render2d:FillRectangle (color, x, y0 - h, self.BarWidth, h)
 		x = x + self.BarWidth + self.BarSpacing
 	end
 end
