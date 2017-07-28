@@ -32,10 +32,17 @@ function self:End (t)
 	self.EndTime = t
 end
 
-function self:GetName () return self.Name end
+function self:GetName ()
+	return self.Name
+end
 
-function self:GetStartTime () return self.StartTime end
-function self:GetEndTime   () return self.EndTime   end
+function self:GetStartTime ()
+	return self.StartTime
+end
+
+function self:GetEndTime ()
+	return self.EndTime
+end
 
 function self:GetDuration ()
 	return self.EndTime - self.StartTime
@@ -67,7 +74,7 @@ function self:IndexOf (name)
 	return nil
 end
 
-Profiler.Section.Pool = Profiler.PoolAllocator (Profiler.Section)
+Profiler.Section.Pool = Pool (Profiler.Section, self.Initialize, self.Scrub)
 function Profiler.Section.Alloc (...)
 	return Profiler.Section.Pool:Alloc (...)
 end

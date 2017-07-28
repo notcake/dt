@@ -1,13 +1,13 @@
 local self = {}
 Profiler.Profiler = Class (self)
 
+self.FrameEnded = Event ()
+
 function self:ctor ()
 	self.Frames = CircularBuffer (256)
 	self.CurrentFrame = nil
 	self.SectionStack = {}
 end
-
-self.FrameEnded = Event ():SetName ("FrameEnded")
 
 function self:BeginFrame (index, t)
 	local t = t or SysTime ()
@@ -54,6 +54,10 @@ end
 
 function self:GetFrames ()
 	return self.Frames
+end
+
+function self:GetLastFrame ()
+	return self.Frames:Get (-1)
 end
 
 function self:BeginSection (name, t)

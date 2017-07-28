@@ -10,7 +10,7 @@ function self:Initialize (index, startTime)
 	
 	self.Index = index
 	
-	self.Section = Profiler.Section.Alloc (nil, startTime)
+	self.Section = Profiler.Section.Alloc (string.format ("Frame %d", index), startTime)
 end
 
 function self:Scrub ()
@@ -38,18 +38,44 @@ function self:End (t)
 	self.Section:End (t)
 end
 
-function self:GetIndex () return self.Index end
-
-function self:GetStartTime () return self.Section:GetStartTime () end
-function self:GetEndTime   () return self.Section:GetEndTime   () end
-
-function self:GetDuration  () return self.Section:GetDuration  () end
+function self:GetIndex ()
+	return self.Index
+end
 
 function self:GetRootSection ()
 	return self.Section
 end
 
-Profiler.Frame.Pool = Profiler.PoolAllocator (Profiler.Frame)
+-- Section
+function self:GetName ()
+	return self.Section:GetName ()
+end
+
+function self:GetStartTime ()
+	return self.Section:GetStartTime ()
+end
+
+function self:GetEndTime ()
+	return self.Section:GetEndTime ()
+end
+
+function self:GetDuration ()
+	return self.Section:GetDuration ()
+end
+
+function self:GetChild (index)
+	return self.Section:GetChild (index)
+end
+
+function self:GetChildCount ()
+	return self.Section:GetChildCount ()
+end
+
+function self:GetChildEnumerator ()
+	return self.Section:GetChildEnumerator ()
+end
+
+Profiler.Frame.Pool = Pool (Profiler.Frame, self.Initialize, self.Scrub)
 function Profiler.Frame.Alloc (...)
 	return Profiler.Frame.Pool:Alloc (...)
 end
