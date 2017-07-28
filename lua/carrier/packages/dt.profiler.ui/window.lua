@@ -34,6 +34,8 @@ function self:ctor (profiler)
 		function (frame)
 			self.DurationLabel:SetText (Util.Duration.Format (frame:GetDuration ()))
 			self.FPSLabel:SetText (string.format ("%.1f fps", 1 / frame:GetDuration ()))
+			
+			self.CallTreeTableView:SetFrame (frame)
 		end
 	)
 end
@@ -42,20 +44,43 @@ function self:dtor ()
 	self.Profiler.FrameEnded:RemoveListener (self:GetHashCode ())
 end
 
+-- IView
 -- Internal
 function self:OnLayout (w, h)
 	if not self.FrameTimeGraph then return end
 	
 	local y = 4
-	self.FrameTimeGraphHeading:SetRectangle (4, y, self.FrameTimeGraphHeading:GetContentSize ())
+	self.FrameTimeGraphHeading:SetRectangle (4, y, self.FrameTimeGraphHeading:GetPreferredSize ())
 	y = y + self.FrameTimeGraphHeading:GetHeight ()
 	y = y + 4
 	self.FrameTimeGraph:SetRectangle (4, y, w - 8, 128)
 	y = y + self.FrameTimeGraph:GetHeight ()
 	
 	y = y + 8
-	self.CallTreeHeading:SetRectangle (4, y, self.CallTreeHeading:GetContentSize ())
+	self.CallTreeHeading:SetRectangle (4, y, self.CallTreeHeading:GetPreferredSize ())
 	y = y + self.CallTreeHeading:GetHeight ()
 	y = y + 4
 	self.CallTreeTableView:SetRectangle (4, y, w - 8, h - 4 - y)
+end
+
+function self:OnVisibleChanged (visible)
+	if visible then
+		self.Profiler.FrameEnded:AddListener (self:GetHashCode(),
+			function (frame)
+				self:SetFrame (frame)
+			end
+		)
+		self:SetFrame (self.Profiler:GetLastFrame ())
+	else
+		self.Profiler.FrameEnded:RemoveListener (self:GetHashCode ())
+	end
+end
+
+-- Window
+function self:SetFrame (frame)
+	local duration = frame and frame:GetDuration () or 0
+	self.DurationLabel:SetText (Util.Duration.Format (duration))
+	self.FPSLabel:SetText (string.format ("%.1f fps", 1 / duration))
+	
+	self.CallTreeTableView:SetFrame (frame)
 end
