@@ -4,6 +4,9 @@ CallTreeTableView = Class (self, Glass.TreeTableView)
 function self:ctor (profiler)
 	self.Profiler = profiler
 	self.Frame    = nil
+	
+	self:GetColumns ():Add ("Name")
+	self:GetColumns ():Add ("Duration"):SetAlignment (Glass.HorizontalAlignment.Right)
 end
 
 -- CallTreeTableView
