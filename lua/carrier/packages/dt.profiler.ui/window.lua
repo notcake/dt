@@ -15,9 +15,6 @@ function self:ctor (profiler)
 	self.FrameTimeGraph = FrameTimeGraph (self.Profiler)
 	self.FrameTimeGraph:SetParent (self)
 	
-	self.DurationLabel = Glass.Label ()
-	self.DurationLabel:SetParent (self)
-	self.DurationLabel:Center ()
 	self.FPSLabel = Glass.Label ()
 	self.FPSLabel:SetParent (self)
 	self.FPSLabel:Center ()
@@ -32,7 +29,6 @@ function self:ctor (profiler)
 	
 	self.Profiler.FrameEnded:AddListener (self:GetHashCode(),
 		function (frame)
-			self.DurationLabel:SetText (Util.Duration.Format (frame:GetDuration ()))
 			self.FPSLabel:SetText (string.format ("%.1f fps", 1 / frame:GetDuration ()))
 			
 			self.CallTreeTableView:SetFrame (frame)
@@ -79,7 +75,6 @@ end
 -- Window
 function self:SetFrame (frame)
 	local duration = frame and frame:GetDuration () or 0
-	self.DurationLabel:SetText (Util.Duration.Format (duration))
 	self.FPSLabel:SetText (string.format ("%.1f fps", 1 / duration))
 	
 	self.CallTreeTableView:SetFrame (frame)
