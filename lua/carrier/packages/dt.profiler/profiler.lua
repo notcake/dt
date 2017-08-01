@@ -67,7 +67,7 @@ function self:BeginSection (name, t)
 
 	local t = t or SysTime ()
 	
-	local section = self.SectionAllocator:Alloc (name, t)
+	local section = Profiler.Section.Alloc (name, t)
 	self.SectionStack [#self.SectionStack]:AddChild (section)
 	self.SectionStack [#self.SectionStack + 1] = section
 	
