@@ -16,10 +16,9 @@ function self:Render (w, h, render2d)
 	local x = w - frameCount * (self.BarWidth + self.BarSpacing) + self.BarSpacing
 	local y0 = h
 	
-	-- HACK: Need to start the line at x = -0.5 really, but surface.* only does ints.
-	render2d:DrawLine (Color.LightGray, -1, 0.25 * h, w, 0.25 * h)
-	render2d:DrawLine (Color.LightGray, -1, 0.50 * h, w, 0.50 * h)
-	render2d:DrawLine (Color.LightGray, -1, 0.75 * h, w, 0.75 * h)
+	render2d:DrawLine (Color.LightGray, -0.5, 0.25 * h, w, 0.25 * h)
+	render2d:DrawLine (Color.LightGray, -0.5, 0.50 * h, w, 0.50 * h)
+	render2d:DrawLine (Color.LightGray, -0.5, 0.75 * h, w, 0.75 * h)
 	
 	for frame in frames:GetEnumerator () do
 		local duration = frame:GetDuration ()
