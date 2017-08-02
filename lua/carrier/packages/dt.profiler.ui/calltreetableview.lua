@@ -34,7 +34,7 @@ end
 function self:PopulateChildren (treeTableViewItem, section, n)
 	for section in section:GetChildEnumerator () do
 		local tableViewItem = Glass.TableViewItem (section:GetName ())
-		tableViewItem:SetColumnText ("Name",     string.rep (" ", n * 8) .. section:GetName ())
+		tableViewItem:SetColumnText ("Name",     string.rep (" ", n * 2) .. section:GetName ())
 		tableViewItem:SetColumnText ("Duration", Util.Duration.Format (section:GetDuration ()))
 		
 		self:AddItem (tableViewItem)
