@@ -34,6 +34,10 @@ function self:ctor (profiler)
 			self.CallTreeTableView:SetFrame (frame)
 		end
 	)
+	
+	self:GetPanel ().PaintOver = function (_)
+		Profiler.Profiler:EndSection ()
+	end
 end
 
 function self:dtor ()
@@ -71,6 +75,12 @@ function self:OnVisibleChanged (visible)
 	else
 		self.Profiler.FrameEnded:RemoveListener (self:GetHashCode ())
 	end
+end
+
+function self:Render (w, h, render2d)
+	Glass.Window:GetFlattenedMethodTable ().Render (self, w, h, render2d)
+	
+	Profiler.Profiler:BeginSection ("dt.Profiler.UI.Window:PaintChildren")
 end
 
 -- Window
