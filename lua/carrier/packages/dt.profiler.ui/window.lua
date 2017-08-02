@@ -17,7 +17,7 @@ function self:ctor (profiler)
 	
 	self.FPSLabel = Glass.Label ()
 	self.FPSLabel:SetParent (self)
-	self.FPSLabel:Center ()
+	self.FPSLabel:SetHorizontalAlignment (Glass.HorizontalAlignment.Right)
 	
 	self.CallTreeHeading = Glass.Label ()
 	self.CallTreeHeading:SetParent (self)
@@ -47,6 +47,7 @@ function self:OnLayout (w, h)
 	
 	local y = 4
 	self.FrameTimeGraphHeading:SetRectangle (4, y, self.FrameTimeGraphHeading:GetPreferredSize ())
+	self.FPSLabel:SetRectangle (4, y, w - 8, self.FrameTimeGraphHeading:GetHeight ())
 	y = y + self.FrameTimeGraphHeading:GetHeight ()
 	y = y + 4
 	self.FrameTimeGraph:SetRectangle (4, y, w - 8, 128)
