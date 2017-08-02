@@ -46,7 +46,7 @@ function self:OnEnabled ()
 			local frame = self.Profiler:GetCurrentFrame ()
 			local lastFrameIndex = frame and frame:GetIndex ()
 			
-			local currentFrameIndex = FrameNumber ()
+			local currentFrameIndex = FrameNumber () + 1
 			if lastFrameIndex == currentFrameIndex then return end
 			
 			self.Profiler:AdvanceFrame (currentFrameIndex)
