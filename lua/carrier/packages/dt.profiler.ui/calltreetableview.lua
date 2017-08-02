@@ -5,8 +5,15 @@ function self:ctor (profiler)
 	self.Profiler = profiler
 	self.Frame    = nil
 	
-	self:GetColumns ():Add ("Name"):SetWidth (400)
-	self:GetColumns ():Add ("Duration"):SetAlignment (Glass.HorizontalAlignment.Right)
+	local column = self:GetColumns ():Add ("Name")
+	column:SetWidth (300)
+	
+	local column = self:GetColumns ():Add ("Duration")
+	column:SetAlignment (Glass.HorizontalAlignment.Right)
+	
+	local column = self:GetColumns ():Add ("Visual")
+	column:SetWidth (300)
+	column:SetName ("")
 end
 
 -- CallTreeTableView
@@ -25,20 +32,32 @@ function self:SetFrame (frame)
 	local tableViewItem = Glass.TableViewItem (self.Frame:GetName ())
 	tableViewItem:SetColumnText ("Name",     self.Frame:GetName ())
 	tableViewItem:SetColumnText ("Duration", Util.Duration.Format (self.Frame:GetDuration ()))
+	tableViewItem:SetColumnRenderer ("Visual",
+		function (tableViewItem, w, h, render2d)
+			render2d:FillRectangle (Color.CornflowerBlue, 0, 6, w, h - 12)
+		end
+	)
 	
 	self:AddItem (tableViewItem)
 	
-	self:PopulateChildren (tableViewItem, self.Frame:GetRootSection (), 1)
+	self:PopulateChildren (tableViewItem, self.Frame, self.Frame:GetRootSection (), 1)
 end
 
-function self:PopulateChildren (treeTableViewItem, section, n)
+function self:PopulateChildren (treeTableViewItem, frame, section, n)
 	for section in section:GetChildEnumerator () do
 		local tableViewItem = Glass.TableViewItem (section:GetName ())
 		tableViewItem:SetColumnText ("Name",     string.rep (" ", n * 2) .. section:GetName ())
 		tableViewItem:SetColumnText ("Duration", Util.Duration.Format (section:GetDuration ()))
+		tableViewItem:SetColumnRenderer ("Visual",
+			function (tableViewItem, w, h, render2d)
+				local t0 = (section:GetStartTime () - frame:GetStartTime ()) / frame:GetDuration ()
+				local dt = section:GetDuration () / frame:GetDuration ()
+				render2d:FillRectangle (Color.CornflowerBlue, t0 * w, 6, math.max (1, dt * w), h - 12)
+			end
+		)
 		
 		self:AddItem (tableViewItem)
 		
-		self:PopulateChildren (tableViewItem, section, n + 1)
+		self:PopulateChildren (tableViewItem, frame, section, n + 1)
 	end
 end
