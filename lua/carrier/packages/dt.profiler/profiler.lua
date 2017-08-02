@@ -84,7 +84,7 @@ function self:EndSection (index, t)
 		self.SectionStack [index]:End (t)
 		self.SectionStack [index] = nil
 	else
-		for i = #self.SectionStack, i, -1 do
+		for i = #self.SectionStack, index, -1 do
 			self.SectionStack [i]:End (t)
 			self.SectionStack [i] = nil
 		end
