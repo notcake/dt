@@ -27,14 +27,6 @@ function self:ctor (profiler)
 	self.CallTreeTableView = CallTreeTableView (self.Profiler)
 	self.CallTreeTableView:SetParent (self)
 	
-	self.Profiler.FrameEnded:AddListener (self:GetHashCode(),
-		function (frame)
-			self.FPSLabel:SetText (string.format ("%.1f fps", 1 / frame:GetDuration ()))
-			
-			self.CallTreeTableView:SetFrame (frame)
-		end
-	)
-	
 	self:GetPanel ().PaintOver = function (_)
 		Profiler.Profiler:EndSection ()
 	end
