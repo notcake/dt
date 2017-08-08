@@ -16,7 +16,7 @@ function self:Render (w, h, render2d)
 	local graphY = self.Graph:GetY ()
 	for _, v in ipairs ({ 1 / 60, 1 / 30, 1 / 20 }) do
 		local label = string.format ("%.1f ms", v * 1000)
-		Glass.TextRenderer:DrawTextAligned (label, self.VerticalAxisFont, Glass.Skin.Default.Colors.Text, self.VerticalAxisWidth - 4, graphY + self.Graph:GetDurationY (v), Glass.HorizontalAlignment.Right, Glass.VerticalAlignment.Center)
+		self:GetEnvironment ():GetTextRenderer ():DrawTextAligned (label, self.VerticalAxisFont, Glass.Skin.Default.Colors.Text, self.VerticalAxisWidth - 4, graphY + self.Graph:GetDurationY (v), Glass.HorizontalAlignment.Right, Glass.VerticalAlignment.Center)
 	end
 	
 	-- Bounding rectangle for graph
@@ -24,7 +24,7 @@ function self:Render (w, h, render2d)
 end
 
 function self:OnLayout (w, h)
-	self.VerticalAxisWidth = Glass.TextRenderer:GetTextSize ("16.7 ms", self.VerticalAxisFont) + 8
+	self.VerticalAxisWidth = self:GetEnvironment ():GetTextRenderer ():GetTextSize ("16.7 ms", self.VerticalAxisFont) + 8
 	
 	-- Graph (inset 1px to allow for bounding rectangle)
 	self.Graph:SetRectangle (self.VerticalAxisWidth + 1, 1, w - self.VerticalAxisWidth - 2, h - 2)
