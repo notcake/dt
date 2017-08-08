@@ -27,7 +27,7 @@ function self:ctor (profiler)
 	self.CallTreeTableView = CallTreeTableView (self.Profiler)
 	self.CallTreeTableView:SetParent (self)
 	
-	self:GetPanel ().PaintOver = function (_)
+	self:GetHandle ().PaintOver = function (_)
 		Profiler.Profiler:EndSection ()
 	end
 end
@@ -49,7 +49,7 @@ function self:OnLayout (w, h)
 	self.FrameTimeGraph:SetRectangle (4, y, w - 8, 128)
 	y = y + self.FrameTimeGraph:GetHeight ()
 	
-	y = y + 8
+	y = y + 16
 	self.CallTreeHeading:SetRectangle (4, y, self.CallTreeHeading:GetPreferredSize ())
 	y = y + self.CallTreeHeading:GetHeight ()
 	y = y + 4
