@@ -57,6 +57,8 @@ function self:OnLayout (w, h)
 end
 
 function self:OnVisibleChanged (visible)
+	if not self.Profiler then return end
+	
 	if visible then
 		self.Profiler.FrameEnded:AddListener (self:GetHashCode(),
 			function (frame)
