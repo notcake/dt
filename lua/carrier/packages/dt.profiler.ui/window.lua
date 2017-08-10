@@ -6,12 +6,11 @@ function self:ctor (profiler)
 	
 	self:SetTitle ("dt")
 	self:SetSize (800, 600)
-	self:Center ()
 	
 	self.FrameTimeGraphHeading = Glass.Label ()
 	self.FrameTimeGraphHeading:SetParent (self)
-	self.FrameTimeGraphHeading:SetFont (Glass.Skin.Default.Fonts.Headline)
 	self.FrameTimeGraphHeading:SetText ("Frame Render Times")
+	self.FrameTimeGraphHeading:SetTextClass (Glass.TextClass.Headline)
 	self.FrameTimeGraph = FrameTimeGraph (self.Profiler)
 	self.FrameTimeGraph:SetParent (self)
 	
@@ -21,15 +20,11 @@ function self:ctor (profiler)
 	
 	self.CallTreeHeading = Glass.Label ()
 	self.CallTreeHeading:SetParent (self)
-	self.CallTreeHeading:SetFont (Glass.Skin.Default.Fonts.Headline)
 	self.CallTreeHeading:SetText ("Call Tree")
+	self.CallTreeHeading:SetTextClass (Glass.TextClass.Headline)
 	
 	self.CallTreeTableView = CallTreeTableView (self.Profiler)
 	self.CallTreeTableView:SetParent (self)
-	
-	self:GetHandle ().PaintOver = function (_)
-		Profiler.Profiler:EndSection ()
-	end
 end
 
 function self:dtor ()
@@ -75,6 +70,18 @@ function self:Render (w, h, render2d)
 	Glass.Window:GetFlattenedMethodTable ().Render (self, w, h, render2d)
 	
 	Profiler.Profiler:BeginSection ("dt.Profiler.UI.Window:PaintChildren")
+end
+
+-- View
+-- Internal
+function self:CreateHandleInEnvironment (environment, parent)
+	local handle = Glass.Window:GetFlattenedMethodTable ().CreateHandleInEnvironment (self, environment, parent)
+	
+	handle.PaintOver = function (_)
+		Profiler.Profiler:EndSection ()
+	end
+	
+	return handle
 end
 
 -- Window

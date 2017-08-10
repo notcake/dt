@@ -7,16 +7,21 @@ function self:ctor (profiler)
 	self.Graph = FrameTimeGraph.Graph (self)
 	self.Graph:SetParent (self)
 	
-	self.VerticalAxisFont = Glass.Skin.Default.Fonts.Caption
+	self.VerticalAxisFont  = Glass.Font("rer", 10)
 	self.VerticalAxisWidth = 0
 end
 
 -- IView
+-- Internal
+function self:OnSkinChanged (skin)
+	self.VerticalAxisFont = skin:GetCaptionFont ()
+end
+
 function self:Render (w, h, render2d)
 	local graphY = self.Graph:GetY ()
 	for _, v in ipairs ({ 1 / 60, 1 / 30, 1 / 20 }) do
 		local label = string.format ("%.1f ms", v * 1000)
-		self:GetEnvironment ():GetTextRenderer ():DrawTextAligned (label, self.VerticalAxisFont, Glass.Skin.Default.Colors.Text, self.VerticalAxisWidth - 4, graphY + self.Graph:GetDurationY (v), Glass.HorizontalAlignment.Right, Glass.VerticalAlignment.Center)
+		self:GetEnvironment ():GetTextRenderer ():DrawTextAligned (label, self.VerticalAxisFont, self:GetSkin ():GetTextColor (), self.VerticalAxisWidth - 4, graphY + self.Graph:GetDurationY (v), Glass.HorizontalAlignment.Right, Glass.VerticalAlignment.Center)
 	end
 	
 	-- Bounding rectangle for graph

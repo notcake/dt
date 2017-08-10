@@ -21,7 +21,20 @@ include ("commands.lua")
 
 Window = nil
 function GetWindow ()
-	Window = Window or UI.Window (Profiler.Profiler)
+	if not Window then
+		collectgarbage("stop")
+		debug.sethook()
+		local t0 = SysTime ()
+		Window = UI.Window (Profiler.Profiler)
+		print ("\tdt.Profiler.UI.Window() took " .. GLib.FormatDuration(SysTime() - t0))
+		local t1 = SysTime ()
+		Window:SetParent (Glass.Environment:GetRootView ())
+		print ("\tdt.Profiler.UI.Window reification took " .. GLib.FormatDuration(SysTime() - t1))
+		Window:Center ()
+		print ("dt.Profiler.UI.Window() took " .. GLib.FormatDuration(SysTime() - t0))
+		collectgarbage("restart")
+	end
+	
 	return Window
 end
 
