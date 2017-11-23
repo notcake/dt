@@ -1,3 +1,5 @@
+-- PACKAGE dt.Profiler.UI
+
 UI = {}
 
 Error = require ("Pylon.Error")

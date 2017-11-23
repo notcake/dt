@@ -1,3 +1,5 @@
+-- PACKAGE dt.Profiler
+
 Profiler = {}
 
 Error = require ("Pylon.Error")
