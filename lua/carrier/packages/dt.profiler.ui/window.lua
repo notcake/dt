@@ -77,6 +77,16 @@ end
 function self:CreateHandleInEnvironment (environment, parent)
 	local handle = Glass.Window:GetFlattenedMethodTable ().CreateHandleInEnvironment (self, environment, parent)
 	
+	handle.Think = function ()
+		Profiler.Profiler:BeginSection ("dt.Profiler.UI.Window InternalThinkTraverse")
+	end
+	local dummy = vgui.CreateX ("Panel", handle)
+	dummy:SetSize (0, 0)
+	dummy:SetZPos (32767)
+	dummy.Think = function ()
+		Profiler.Profiler:EndSection ()
+	end
+	
 	handle.PaintOver = function (_)
 		Profiler.Profiler:EndSection ()
 	end
@@ -89,5 +99,7 @@ function self:SetFrame (frame)
 	local duration = frame and frame:GetDuration () or 0
 	self.FPSLabel:SetText (string.format ("%.1f fps", 1 / duration))
 	
-	self.CallTreeTableView:SetFrame (frame)
+	if not self.CallTreeTableView:IsMouseOver () then
+		self.CallTreeTableView:SetFrame (frame)
+	end
 end
