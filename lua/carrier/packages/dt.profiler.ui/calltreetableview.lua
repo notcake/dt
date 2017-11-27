@@ -9,6 +9,7 @@ function self:ctor (profiler)
 	column:SetWidth (300)
 	
 	local column = self:GetColumns ():Add ("Duration")
+	column:SetWidth (100)
 	column:SetAlignment (Glass.HorizontalAlignment.Right)
 	
 	local column = self:GetColumns ():Add ("Visual")
@@ -26,6 +27,12 @@ function self:SetFrame (frame)
 	
 	local previousFrame = self.Frame
 	self.Frame = frame
+	if self.Frame then
+		self.Frame:AddRef ()
+	end
+	if previousFrame then
+		previousFrame:Release ()
+	end
 	
 	self:ClearItems ()
 	
@@ -46,7 +53,7 @@ end
 function self:PopulateChildren (treeTableViewItem, frame, section, n)
 	for section in section:GetChildEnumerator () do
 		local tableViewItem = Glass.TableViewItem (section:GetName ())
-		tableViewItem:SetColumnText ("Name",     string.rep (" ", n * 2) .. section:GetName ())
+		tableViewItem:SetColumnText ("Name",     string.rep (" ", n * 4) .. section:GetName ())
 		tableViewItem:SetColumnText ("Duration", Util.Duration.Format (section:GetDuration ()))
 		tableViewItem:SetColumnRenderer ("Visual",
 			function (tableViewItem, w, h, render2d)
