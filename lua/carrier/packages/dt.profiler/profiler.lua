@@ -78,6 +78,7 @@ function self:EndSection (index, t)
 	local index = index or #self.SectionStack
 	local t     = t     or SysTime ()
 	
+	if index == 1 then return end
 	if not self.SectionStack [index] then return end
 	
 	if #self.SectionStack == index then
