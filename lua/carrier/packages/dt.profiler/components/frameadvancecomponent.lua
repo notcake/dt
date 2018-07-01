@@ -1,9 +1,6 @@
 local self = {}
 Profiler.FrameAdvanceComponent = Class (self, Profiler.ProfilerComponent)
 
-Profiler.FrameAdvanceComponent.FirstHookName = "dt.FrameAdvanceComponent.\xc2\x52\xd1\xfa"
-Profiler.FrameAdvanceComponent.LastHookName  = "dt.FrameAdvanceComponent.\x89\x45\x9b\xad"
-
 function self:ctor (profiler)
 	self.Profiler = profiler
 	
@@ -37,56 +34,60 @@ function self:OnEnabled ()
 	self:AddPrePostHook ("DrawHUD")
 	
 	for _, eventName in ipairs ({ "Think", "Tick", "CreateMove", "StartCommand" }) do
-		hook.Add (eventName, Profiler.FrameAdvanceComponent.FirstHookName,
+		Hooks.AddPreHook (eventName, "dt.FrameAdvanceComponent",
 			function ()
 				self.Profiler:BeginSection (eventName)
 			end
 		)
-		hook.Add (eventName, Profiler.FrameAdvanceComponent.LastHookName,
+		Hooks.AddPostHook (eventName, "dt.FrameAdvanceComponent",
 			function ()
 				self.Profiler:EndSection ()
 			end
 		)
 	end
 	
-	hook.Add ("SetupMove", Profiler.FrameAdvanceComponent.FirstHookName,
+	Hooks.AddPreHook ("SetupMove", "dt.FrameAdvanceComponent",
 		function ()
 			self.Profiler:BeginSection ("SetupMove / Move / FinishMove")
 		end
 	)
-	hook.Add ("FinishMove", Profiler.FrameAdvanceComponent.LastHookName,
+	Hooks.AddPostHook ("FinishMove", "dt.FrameAdvanceComponent",
 		function ()
 			self.Profiler:EndSection ()
 		end
 	)
 	
-	hook.Add ("PreDrawViewModel", Profiler.FrameAdvanceComponent.FirstHookName,
+	Hooks.AddPreHook ("PreDrawViewModel", "dt.FrameAdvanceComponent",
 		function (viewModel, ply, weapon)
 			if not viewModel then return end
 			self.Profiler:BeginSection ("DrawViewModel")
 		end
 	)
-	hook.Add ("PostDrawViewModel", Profiler.FrameAdvanceComponent.LastHookName,
+	Hooks.AddPostHook ("PostDrawViewModel", "dt.FrameAdvanceComponent",
 		function (viewModel, ply, weapon)
 			if not viewModel then return end
 			self.Profiler:EndSection ()
 		end
 	)
 	
-	hook.Add ("PrePlayerDraw", Profiler.FrameAdvanceComponent.FirstHookName,
+	Hooks.AddPreHook ("PrePlayerDraw", "dt.FrameAdvanceComponent",
 		function (ply)
 			self.Profiler:BeginSection ("PlayerDraw (" .. ply:Name () .. ")")
 		end
 	)
-	hook.Add ("PostPlayerDraw", Profiler.FrameAdvanceComponent.LastHookName, function (ply) self.Profiler:EndSection () end)
+	Hooks.AddPostHook ("PostPlayerDraw", "dt.FrameAdvanceComponent",
+		function (ply)
+			self.Profiler:EndSection ()
+		end
+	)
 	
-	hook.Add ("PreRender", Profiler.FrameAdvanceComponent.FirstHookName,
+	Hooks.AddPreHook ("PreRender", "dt.FrameAdvanceComponent",
 		function ()
 			-- print (FrameNumber (), "PreRender")
 			self.Profiler:BeginSection ("Render")
 		end
 	)
-	hook.Add ("PostRender", Profiler.FrameAdvanceComponent.LastHookName,
+	Hooks.AddPostHook ("PostRender", "dt.FrameAdvanceComponent",
 		function (_)
 			-- print (FrameNumber (), "PostRender")
 			self.Profiler:EndSection ()
@@ -113,12 +114,12 @@ function self:OnDisabled ()
 	end
 	
 	for _, eventName in ipairs ({ "Think", "Tick", "CreateMove", "StartCommand" }) do
-		hook.Remove (eventName, Profiler.FrameAdvanceComponent.FirstHookName)
-		hook.Remove (eventName, Profiler.FrameAdvanceComponent.LastHookName)
+		Hooks.RemovePreHook  (eventName, "dt.FrameAdvanceComponent")
+		Hooks.RemovePostHook (eventName, "dt.FrameAdvanceComponent")
 	end
 	
-	hook.Remove ("SetupMove",  Profiler.FrameAdvanceComponent.FirstHookName)
-	hook.Remove ("FinishMove", Profiler.FrameAdvanceComponent.LastHookName)
+	Hooks.RemovePreHook  ("SetupMove",  "dt.FrameAdvanceComponent")
+	Hooks.RemovePostHook ("FinishMove", "dt.FrameAdvanceComponent")
 	
 	self:RemovePrePostHook ("Render")
 	self:RemovePrePostHook ("DrawOpaqueRenderables")
@@ -132,12 +133,12 @@ end
 
 -- Internal
 function self:AddPrePostHook (name)
-	hook.Add ("Pre" .. name, Profiler.FrameAdvanceComponent.FirstHookName,
+	Hooks.AddPreHook ("Pre" .. name, "dt.FrameAdvanceComponent",
 		function ()
 			self.Profiler:BeginSection (name)
 		end
 	)
-	hook.Add ("Post" .. name, Profiler.FrameAdvanceComponent.LastHookName,
+	Hooks.AddPostHook ("Post" .. name, "dt.FrameAdvanceComponent",
 		function ()
 			self.Profiler:EndSection ()
 		end
@@ -145,6 +146,6 @@ function self:AddPrePostHook (name)
 end
 
 function self:RemovePrePostHook (name)
-	hook.Remove ("Pre"  .. name, Profiler.FrameAdvanceComponent.FirstHookName)
-	hook.Remove ("Post" .. name, Profiler.FrameAdvanceComponent.LastHookName)
+	Hooks.RemovePreHook  ("Pre"  .. name, "dt.FrameAdvanceComponent")
+	Hooks.RemovePostHook ("Post" .. name, "dt.FrameAdvanceComponent")
 end

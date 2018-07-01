@@ -18,6 +18,8 @@ HTTP = require_provider ("Pylon.HTTP")
 
 Pool = require ("Pylon.Pool")
 
+Hooks = require ("GarrysMod.Hooks")
+
 include ("poolobject.lua")
 
 include ("section.lua")
