@@ -1,37 +1,37 @@
 local self = {}
-Profiler.ProfilerComponent = Class (self, Profiler.IProfilerComponent)
+Profiler.ProfilerComponent = Class(self, Profiler.IProfilerComponent)
 
-function self:ctor ()
+function self:ctor()
 	self.Enabled = false
 end
 
-function self:dtor ()
-	self:Disable ()
+function self:dtor()
+	self:Disable()
 end
 
-function self:IsEnabled ()
+function self:IsEnabled()
 	return self.Enabled
 end
 
-function self:Enable ()
+function self:Enable()
 	if self.Enabled then return end
 	
 	self.Enabled = true
 	
-	self:OnEnabled ()
+	self:OnEnabled()
 end
 
-function self:Disable ()
+function self:Disable()
 	if not self.Enabled then return end
 	
 	self.Enabled = false
 	
-	self:OnDisabled ()
+	self:OnDisabled()
 end
 
 -- Internal, do not call
-function self:OnEnabled ()
+function self:OnEnabled()
 end
 
-function self:OnDisabled ()
+function self:OnDisabled()
 end

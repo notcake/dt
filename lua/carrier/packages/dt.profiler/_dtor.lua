@@ -1,1 +1,1 @@
-ComponentHost:dtor ()
+ComponentHost:dtor()

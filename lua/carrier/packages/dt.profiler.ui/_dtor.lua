@@ -1,6 +1,6 @@
 if Window then
-	Window:dtor ()
+	Window:dtor()
 	Window = nil
 end
 
-UnregisterCommands ()
+UnregisterCommands()

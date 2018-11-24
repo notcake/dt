@@ -1,5 +1,5 @@
 local self = {}
-Profiler.ProjectedSection = Class (self)
+Profiler.ProjectedSection = Class(self)
 
-function self:ctor ()
+function self:ctor()
 end
